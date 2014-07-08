@@ -1,31 +1,24 @@
 package droiders.dark.seenbeenread.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import droiders.dark.seenbeenread.R;
 import droiders.dark.seenbeenread.menufragments.BooksFragment;
 import droiders.dark.seenbeenread.menufragments.MoviesFragment;
 import droiders.dark.seenbeenread.menufragments.PlacesFragment;
 import droiders.dark.seenbeenread.navigationdrawer.NavigationDrawerFragment;
-import droiders.dark.seenbeenread.R;
 
 
-public class BaseActivity extends ActionBarActivity
+public class BaseActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, SearchView.OnQueryTextListener {
 
     /**
@@ -44,7 +37,7 @@ public class BaseActivity extends ActionBarActivity
         setContentView(R.layout.activity_base);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -57,7 +50,7 @@ public class BaseActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getActionBar();
         setTitle(position+1);
         actionBar.setTitle(mTitle);
         Fragment menuFragment=null;
@@ -97,7 +90,7 @@ public class BaseActivity extends ActionBarActivity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
@@ -106,18 +99,16 @@ public class BaseActivity extends ActionBarActivity
     //comment
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
+        if (!mNavigationDrawerFragment.isDrawerOpen()) //show the action bar icons when the drawer is closed
+        {
             getMenuInflater().inflate(R.menu.base, menu);
-            SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-            searchView.setOnQueryTextListener(this);
             restoreActionBar();
+              SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+              searchView.setOnQueryTextListener(this);
             return true;
         }
+        return true;
 
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -140,10 +131,7 @@ public class BaseActivity extends ActionBarActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        newText = newText.isEmpty() ? "" : "Query so far: " + newText;
-        Toast.makeText(this, newText, Toast.LENGTH_SHORT).show();
-
         return true;
-
     }
+
 }
