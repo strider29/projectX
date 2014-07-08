@@ -103,7 +103,7 @@ public class BaseActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
-
+    //comment
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
